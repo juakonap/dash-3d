@@ -6,6 +6,8 @@ from dash.dependencies import Input, Output
 import plotly.graph_objects as go
 import pandas as pd
 
+import plotly.express as px
+
 
 # Read data from a csv
 z_data = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/api_docs/mt_bruno_elevation.csv')
@@ -42,10 +44,18 @@ cont.update_layout(
         })
 
 
+df = px.data.iris()
+sepal = px.scatter_3d(df, x='sepal_length', y='sepal_width', z='petal_width',color='species')
+
 app = dash.Dash(__name__)
 
-app.layout = html.Div([
-    dcc.Graph(id="3d-surface-plot", figure=fig),
-    dcc.Graph(id="contour-surface-plot", figure=cont)
-    ],
-    style={'columnCount': 2})
+app.layout = html.Div(
+    children = [
+        html.Div([
+            dcc.Graph(id="3d-surface-plot", figure=fig),
+            dcc.Graph(id="contour-surface-plot", figure=cont)
+        ],style={'columnCount': 2}),
+        html.Div([
+            dcc.Graph(id="3d-scatter-plot", figure=sepal)
+            ], style={'columnCount': 1})
+            ])
